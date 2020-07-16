@@ -2,6 +2,7 @@
 use async_trait::async_trait;
 use tide::{Server, http::{Method, Request, Response, Url}};
 use crate::State;
+pub use assert_json_diff::assert_json_eq;
 
 #[async_trait]
 pub trait BodyJson {

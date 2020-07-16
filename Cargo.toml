@@ -13,16 +13,14 @@ sqlx = { version = "0.3.5", features = ["runtime-async-std", "macros", "chrono",
 dotenv = "0.15.0"
 pretty_env_logger = "0.4.0"
 chrono = "0.4.13"
-log = "0.4.8"
+log = "0.4.11"
 serde = { version = "1.0.114", features = ["derive"] }
 serde_json = "1.0.56"
-uuid = "0.8.1"
+uuid = { version = "0.8.1", features = ["serde", "v4"] }
 thiserror = "1.0.20"
-http-types = "2.2.1"
-http-service = "0.5.0"
 futures = "0.3.5"
 async-trait = "0.1.36"
 
 [dev-dependencies]
 http-service-mock = "0.5.0"
-assert-json-diff = "1.0.3"
+assert-json-diff = "1.1.0"

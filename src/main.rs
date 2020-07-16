@@ -2,10 +2,12 @@ use dotenv;
 use serde_json;
 use serde_json::json;
 use sqlx;
-use sqlx::{query, PgPool, Pool};
+use sqlx::{query, query_as, PgPool, Pool};
 use tide;
 use tide::http::StatusCode;
 use tide::{Request, Response, Server};
+use uuid::Uuid;
+use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeMap, SerializeStruct};
 
 #[async_std::main]
 async fn main() {
@@ -13,25 +15,43 @@ async fn main() {
     app.listen("127.0.0.1:9000").await.unwrap();
 }
 
+#[cfg(not(test))]
+async fn make_db_pool() -> PgPool {
+    let db_url = std::env::var("DATABASE_URL").unwrap();
+    Pool::new(&db_url).await.unwrap()
+}
+
+#[cfg(test)]
+async fn make_db_pool() -> PgPool {
+    let db_url = std::env::var("DATABASE_URL_TEST").unwrap();
+    Pool::new(&db_url).await.unwrap()
+}
+
 async fn server() -> Server<State> {
     dotenv::dotenv().ok();
     pretty_env_logger::init();
-    let db_url = std::env::var("DATABASE_URL").unwrap();
-    let db_pool: PgPool = Pool::new(&db_url).await.unwrap();
+    let db_pool: PgPool = make_db_pool().await;
 
     let mut app = tide::with_state(State { db_pool });
 
-    app.at("/").get(|req: Request<State>| async move {
-        // let db_pool = &req.state().db_pool;
-        // let rows = query!("Select 1 as one where 1 = 2").fetch_one(db_pool).await?;
+    app.at("/users").get(|req: Request<State>| async move {
+        let db_pool = &req.state().db_pool;
+
+        let users: Vec<User> = query_as!(User, "select id, username from users")
+            .fetch_all(db_pool)
+            .await?;
+
+        
+        // let rows = query!("Select count(*) from users")
+        //     .fetch_one(db_pool)
+        //     .await?;
 
         // let resp = json!({
         //     "code": 200,
         //     "success": true
         // });
-
-        let json = json!([1, 2, 3]);
-        Ok(json)
+        let resp = json!(users);
+        Ok(resp)
     });
 
     app
@@ -44,3 +64,20 @@ struct State {
 
 #[cfg(test)]
 mod test;
+
+struct User {
+    id: Uuid,
+    username: String,
+}
+
+impl Serialize for User {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: Serializer {
+            let mut state = serializer.serialize_struct("User", 2)?;
+            state.serialize_field("id", &self.id)?;
+            state.serialize_field("username", &self.username)?;
+            state.end()
+    }
+    
+}

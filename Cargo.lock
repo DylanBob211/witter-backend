@@ -87,9 +87,9 @@ checksum = "85bb70cc08ec97ca5450e6eba421deeea5f172c0fc61f78b5357b2a8e8be195f"
 
 [[package]]
 name = "assert-json-diff"
-version = "1.0.3"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9c356497fd3417158bcb318266ac83c391219ca3a5fa659049f42e0041ab57d6"
+checksum = "4259cbe96513d2f1073027a259fc2ca917feb3026a5a8d984e3628e490255cc0"
 dependencies = [
  "extend",
  "serde",
@@ -126,7 +126,7 @@ dependencies = [
  "async-std",
  "byte-pool",
  "futures-core",
- "http-types 2.2.1",
+ "http-types 2.3.0",
  "httparse",
  "lazy_static",
  "log",
@@ -153,7 +153,7 @@ checksum = "a26fe2d2fa49d090097772c83e77453b2812d0902520f41bee9b3b17d02ac0ae"
 dependencies = [
  "async-channel",
  "async-std",
- "http-types 2.2.1",
+ "http-types 2.3.0",
  "log",
  "memchr",
  "pin-project-lite",
@@ -843,9 +843,9 @@ dependencies = [
 
 [[package]]
 name = "http-types"
-version = "2.2.1"
+version = "2.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ca4221cd1c7cedf275cd0ad3c9dfe58b5acc93cdd5511c7e020a102e1995fe99"
+checksum = "4bc341c4b7a71eb0d85c760dc7363648b82ecc38fa5ead50f69b52858df708b9"
 dependencies = [
  "anyhow",
  "async-std",
@@ -949,9 +949,9 @@ checksum = "9457b06509d27052635f90d6466700c65095fdf75409b3fbdd903e988b886f49"
 
 [[package]]
 name = "log"
-version = "0.4.8"
+version = "0.4.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "14b6052be84e6b71ab17edffc2eeabf5c2c3ae1fdb464aae35ac50c67a44e1f7"
+checksum = "4fabed175da42fed1fa0746b0ea71f412aa9d35e76e95e59b192c64b9dc2bf8b"
 dependencies = [
  "cfg-if",
 ]
@@ -1835,7 +1835,7 @@ dependencies = [
  "async-sse",
  "async-std",
  "femme",
- "http-types 2.2.1",
+ "http-types 2.3.0",
  "kv-log-macro",
  "route-recognizer",
  "serde",
@@ -1975,6 +1975,10 @@ name = "uuid"
 version = "0.8.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9fde2f6a4bea1d6e007c4ad38c6839fa71cbb63b6dbf5b595aa38dc9b1093c11"
+dependencies = [
+ "rand",
+ "serde",
+]
 
 [[package]]
 name = "vcpkg"
@@ -2140,9 +2144,7 @@ dependencies = [
  "chrono",
  "dotenv",
  "futures",
- "http-service",
  "http-service-mock",
- "http-types 2.2.1",
  "log",
  "pretty_env_logger",
  "serde",
