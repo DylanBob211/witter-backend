@@ -4,10 +4,9 @@ use serde_json::json;
 use sqlx;
 use sqlx::{query, query_as, PgPool, Pool};
 use tide;
-use tide::http::StatusCode;
-use tide::{Request, Response, Server};
+use tide::{Request, Server};
 use uuid::Uuid;
-use serde::ser::{Serialize, Serializer, SerializeSeq, SerializeMap, SerializeStruct};
+use serde::Serialize;
 
 #[async_std::main]
 async fn main() {
@@ -41,15 +40,7 @@ async fn server() -> Server<State> {
             .fetch_all(db_pool)
             .await?;
 
-        
-        // let rows = query!("Select count(*) from users")
-        //     .fetch_one(db_pool)
-        //     .await?;
-
-        // let resp = json!({
-        //     "code": 200,
-        //     "success": true
-        // });
+    
         let resp = json!(users);
         Ok(resp)
     });
@@ -65,19 +56,8 @@ struct State {
 #[cfg(test)]
 mod test;
 
+#[derive(Debug, Serialize)]
 struct User {
     id: Uuid,
     username: String,
-}
-
-impl Serialize for User {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-    where
-        S: Serializer {
-            let mut state = serializer.serialize_struct("User", 2)?;
-            state.serialize_field("id", &self.id)?;
-            state.serialize_field("username", &self.username)?;
-            state.end()
-    }
-    
 }
